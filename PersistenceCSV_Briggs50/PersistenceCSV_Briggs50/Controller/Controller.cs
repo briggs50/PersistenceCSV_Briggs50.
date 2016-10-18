@@ -104,6 +104,16 @@ namespace PersistenceCSV_Briggs50.Controller
             MovieList.Add(new Movie() { MovieTitle = "Monty Python and the Holy Grail", MovieYear = 1975, MovieCat = Movie.MovieCategory.Comedy, WouldRecommend = true });
             MovieList.Add(new Movie() { MovieTitle = "Goodfellas", MovieYear = 1990, MovieCat = Movie.MovieCategory.Drama, WouldRecommend = true });
             MovieList.Add(new Movie() { MovieTitle = "Ratatouille", MovieYear = 2007, MovieCat = Movie.MovieCategory.Family, WouldRecommend = true });
+            MovieList.Add(new Movie() { MovieTitle = "The Lord of the Rings: The Return of the King", MovieYear = 2003, MovieCat = Movie.MovieCategory.Action, WouldRecommend = false });
+            MovieList.Add(new Movie() { MovieTitle = "Casablanca", MovieYear = 1942, MovieCat = Movie.MovieCategory.Drama, WouldRecommend = true });
+            MovieList.Add(new Movie() { MovieTitle = "Monsters, Inc.", MovieYear = 2001, MovieCat = Movie.MovieCategory.Family, WouldRecommend = true });
+            MovieList.Add(new Movie() { MovieTitle = "Back to the Future", MovieYear = 1985, MovieCat = Movie.MovieCategory.Family, WouldRecommend = true });
+            MovieList.Add(new Movie() { MovieTitle = "Citizen Kane", MovieYear = 1941, MovieCat = Movie.MovieCategory.Drama, WouldRecommend = false });
+            MovieList.Add(new Movie() { MovieTitle = "North by Northwest", MovieYear = 1959, MovieCat = Movie.MovieCategory.Action, WouldRecommend = false });
+            MovieList.Add(new Movie() { MovieTitle = "The Wizard of OZ", MovieYear = 1939, MovieCat = Movie.MovieCategory.Musical, WouldRecommend = true });
+            MovieList.Add(new Movie() { MovieTitle = "Dr. Strangelove", MovieYear = 1964, MovieCat = Movie.MovieCategory.Comedy, WouldRecommend = false });
+            MovieList.Add(new Movie() { MovieTitle = "Singin' in the Rain", MovieYear = 1952, MovieCat = Movie.MovieCategory.Musical, WouldRecommend = true });
+            MovieList.Add(new Movie() { MovieTitle = "Raiders of the Lost Ark", MovieYear = 1981, MovieCat = Movie.MovieCategory.Family, WouldRecommend = false });
 
             return MovieList;
         }

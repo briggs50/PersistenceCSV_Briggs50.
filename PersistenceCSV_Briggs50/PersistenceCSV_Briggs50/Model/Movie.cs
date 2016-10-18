@@ -13,10 +13,11 @@ namespace PersistenceCSV_Briggs50.Model
         public enum MovieCategory
         {
             Drama,
-            Thriller,
+            Musical,
             Action,
             Comedy,
-            Family
+            Family,
+            Thriller
         }
 
         #endregion
