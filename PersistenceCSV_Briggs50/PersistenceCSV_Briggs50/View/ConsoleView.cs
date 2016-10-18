@@ -1,4 +1,6 @@
-﻿using PersistenceCSV_Briggs50.Util;
+﻿using PersistenceCSV_Briggs50.Controller;
+using PersistenceCSV_Briggs50.Model;
+using PersistenceCSV_Briggs50.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,9 @@ namespace PersistenceCSV_Briggs50.View
         #region FIELDS
 
         private ViewState _currentViewState;
+        private static GameController _gameController;
+        private List<Movie> MovieList;
+        private List<string> MovieStringListWrite;
 
         #endregion
 
@@ -169,7 +174,7 @@ namespace PersistenceCSV_Briggs50.View
             while (choosing & numberOfAttempts != maxAttempts)
             {
 
-                // check for valid integer from readKey, and make sure integer is in range
+                // checks that the integer is in range and that it is a key
                 if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out menuChoice) && menuChoice > 0 && menuChoice <= 6)
                 {
                     choosing = false;
@@ -178,11 +183,11 @@ namespace PersistenceCSV_Briggs50.View
                 {
                     Console.WriteLine(ConsoleUtil.Center("ERROR: Valid menu choices are numbers 1-6"));
                     numberOfAttempts++;
-                    
+
                 }
 
-                
-                
+
+
             }
 
             if (numberOfAttempts == maxAttempts)
@@ -205,6 +210,34 @@ namespace PersistenceCSV_Briggs50.View
             System.Environment.Exit(1);
         }
 
+
+        public void DisplayMovies(List<Movie> MovieList)
+        {
+            foreach (Movie movie in MovieList)
+            {
+                Console.WriteLine("Movie Title: {0}\tMovie Year: {1}\tMovie Category: {2}\tWould Recommend: {3}", movie.MovieTitle, movie.MovieYear, movie.MovieCat, movie.WouldRecommend);
+            }
+        }
+
+
+        public void ObjectListReadWrite(string dataFile)
+        {
+            List<Movie> MovieListWrite = new List<Movie>();
+            List<Movie> MovieListRead = new List<Movie>();
+
+            // initialize a list of movie objects
+            MovieListWrite = _gameController.InitializeListOfMovies(MovieList);
+
+            Console.WriteLine("The following movies will be added to Data.txt.\n");
+            // display list of high scores objects
+            DisplayMovies(MovieListWrite);
+
+            // build the list of movie objects from the list of strings
+            MovieListRead = _gameController.ReadMoviesFromTextFile(MovieList, dataFile);
+
+            // display list of movies again
+            DisplayMovies(MovieList);
+        }
         #endregion
 
     }

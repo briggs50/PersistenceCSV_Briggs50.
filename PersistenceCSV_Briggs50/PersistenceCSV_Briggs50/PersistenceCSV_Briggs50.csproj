@@ -43,9 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Console\ConsoleView.cs" />
+    <Compile Include="View\ConsoleView.cs" />
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Data\DataSetting.cs" />
+    <Compile Include="Model\Movie.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ConsoleConfig.cs" />
