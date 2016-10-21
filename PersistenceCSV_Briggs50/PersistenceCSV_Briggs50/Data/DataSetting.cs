@@ -9,6 +9,6 @@ namespace PersistenceCSV_Briggs50.Data
     public class DataSetting
     {
         public const string textFilePath = "Data\\Data.txt";
-        public const char delineator = ',';
+        public const char delineator = '|';
     }
 }

@@ -1,1 +1,20 @@
-﻿
+﻿Star Wars|1977|Action|True
+The Dark Night|2008|Action|False
+Up|2009|Family|True 
+Forest Gump|1994|Comedy|True 
+All About Eve|1951|Drama|True 
+Rear Window|1954|Thriller|False 
+It's a Wonderful Life|1946|Family|False 
+Monty Python and the Holy Grail|1975|Comedy|True 
+Goodfellas|1990|Drama|True 
+Ratatouille|2007|Family|True 
+The Lord of the Rings: The Return of the King|2003|Action|False 
+Casablanca|1942|Drama|True 
+Monsters, Inc.|2001|Family|True 
+Back to the Future|1985|Family|True 
+Citizen Kane|1941|Drama|False 
+North by Northwest|1959|Action|False 
+The Wizard of Oz|1939|Musical|True 
+Dr. Strangelove|1964|Comedy|False 
+Singin' in the Rain|1952|Musical|True 
+Raiders of the Lost Ark|1981|Family|False      

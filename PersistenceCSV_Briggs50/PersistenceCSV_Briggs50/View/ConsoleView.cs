@@ -1,4 +1,5 @@
 ﻿using PersistenceCSV_Briggs50.Controller;
+using PersistenceCSV_Briggs50.Data;
 using PersistenceCSV_Briggs50.Model;
 using PersistenceCSV_Briggs50.Util;
 using System;
@@ -118,10 +119,8 @@ namespace PersistenceCSV_Briggs50.View
 
             Console.Write(ConsoleUtil.Center("Please enter a menu option between 1 and 6"));
             Console.WriteLine("\n\n\n");
-
             MainMenuChoice();
         }
-
 
         /// <summary>
         /// Makes the menu selections work
@@ -171,6 +170,7 @@ namespace PersistenceCSV_Briggs50.View
             int numberOfAttempts = 0;
             int menuChoice = -1;
             bool choosing = true;
+
             while (choosing & numberOfAttempts != maxAttempts)
             {
 
@@ -186,8 +186,6 @@ namespace PersistenceCSV_Briggs50.View
 
                 }
 
-
-
             }
 
             if (numberOfAttempts == maxAttempts)
@@ -198,7 +196,24 @@ namespace PersistenceCSV_Briggs50.View
             return menuChoice;
         }
 
+        /// <summary>
+        /// displays an error message and continue prompt
+        /// </summary>
+        /// <param name="errorMessage"></param>
+        public void DisplayErrorPrompt(string errorMessage)
+        {
 
+            Console.WriteLine(ConsoleUtil.Center("WE'VE ENCOUNTERED AN ERROR"));
+            Console.WriteLine("  " + errorMessage);
+            Console.WriteLine("\n\tPress any key to continue");
+
+            Console.CursorVisible = false;
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// displays an exit screen
+        /// </summary>
         public void DisplayExitScreen()
         {
             Console.WriteLine("\n\n\n");
@@ -210,33 +225,138 @@ namespace PersistenceCSV_Briggs50.View
             System.Environment.Exit(1);
         }
 
-
+        /// <summary>
+        /// displaying the movies
+        /// </summary>
+        /// <param name="MovieList"></param>
         public void DisplayMovies(List<Movie> MovieList)
         {
-            foreach (Movie movie in MovieList)
+            if (MovieList.Count == 0)
             {
-                Console.WriteLine("Movie Title: {0}\tMovie Year: {1}\tMovie Category: {2}\tWould Recommend: {3}", movie.MovieTitle, movie.MovieYear, movie.MovieCat, movie.WouldRecommend);
+                Console.WriteLine(ConsoleUtil.Center("\n\nThere are no stored records to display"));
             }
+            else
+            {
+                foreach (Movie movie in MovieList)
+                {
+                    Console.WriteLine("\nMovie Title: {0}\n Movie Year: {1}\n Movie Category: {2} \n Would Recommend: {3}", movie.MovieTitle, movie.MovieYear, movie.MovieCat, movie.WouldRecommend);
+                }
+            }
+
+            Console.ReadKey();
+            _currentViewState = ViewState.MainMenu;
+
         }
 
-
-        public void ObjectListReadWrite(string dataFile)
+        /// <summary>
+        /// displays the updated records to the screen
+        /// </summary>
+        /// <param name="MovieList"></param>
+        public int[] DisplayUpdateRecordScreen(List<Movie> MovieList)
         {
-            List<Movie> MovieListWrite = new List<Movie>();
-            List<Movie> MovieListRead = new List<Movie>();
+            int[] updatedMovieData = { -1, -1 };
 
-            // initialize a list of movie objects
-            MovieListWrite = _gameController.InitializeListOfMovies(MovieList);
+            bool selectingMovie = true;
 
-            Console.WriteLine("The following movies will be added to Data.txt.\n");
-            // display list of high scores objects
-            DisplayMovies(MovieListWrite);
+            // find a valid player from saves
+            while (selectingMovie)
+            {
+                Console.Clear();
+                Console.CursorVisible = true;
+                string promptMessage = "";
 
-            // build the list of movie objects from the list of strings
-            MovieListRead = _gameController.ReadMoviesFromTextFile(MovieList, dataFile);
+                Console.WriteLine("\n\tPlease input the name of the movie you wish to update");
+                Console.Write("\tor press <Enter> to return to the main menu: ");
+                string movieTitle = Console.ReadLine();
 
-            // display list of movies again
-            DisplayMovies(MovieList);
+                if (movieTitle == "")
+                {
+                    selectingMovie = false;
+                    break;
+                }
+
+                // check through all player scores, replace player score if the name entered matches
+                bool movieFound = false;
+
+                for (int i = 0; i < MovieList.Count; i++)
+                {
+                    if (MovieList[i].MovieTitle == movieTitle)
+                    {
+                        movieFound = true;
+
+                        bool enteringNewMovie = true;
+
+                        // enter new player score
+                        while (enteringNewMovie)
+                        {
+                            int newMovie = -1;
+
+                            Console.Clear();
+                            Console.WriteLine(ConsoleUtil.Center("\n\tCurrently " + movieTitle + " has a score of: " + MovieList[i].MovieTitle));
+                            Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the updated score for " + movieTitle + "or press <enter> to select a diffent player: "));
+                            string userScore = Console.ReadLine();                          
+                        }
+
+                        i = MovieList.Count;
+                    }
+                }
+
+                Console.CursorVisible = false;
+                if (!movieFound)
+                {
+                    Console.WriteLine("\n\n\tSorry, title with that name is on record");
+                    Console.Write("\tPress any key to try another title");
+                    Console.ReadKey();
+                }
+            }
+
+            return updatedMovieData;
+        }
+
+        /// <summary>
+        /// displays the updated movies
+        /// </summary>
+        /// <param name="movieData"></param>
+        public void DisplayUpdatePrompt(Movie movieData)
+        {
+            Console.CursorVisible = false;
+            Console.WriteLine("\tMovie Title: " + movieData.MovieTitle + " changed to " + movieData.MovieTitle);
+            Console.WriteLine("\tMovie Title: " + movieData.MovieCat + " changed to " + movieData.MovieCat);
+            Console.WriteLine("\tMovie Title: " + movieData.MovieYear + " changed to " + movieData.MovieYear);
+            Console.WriteLine("\tMovie Title: " + movieData.WouldRecommend + " changed to " + movieData.WouldRecommend);
+            Console.Write("\n\tPress any key to return to main menu");
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Method for adding a record
+        /// </summary>
+        public Movie DisplayAddRecordScreen()
+        {
+            bool addingRecord = true;
+            string addedRecord = "";
+            while (addingRecord)
+            {
+                Console.Clear();
+                Console.CursorVisible = true;
+
+                Console.WriteLine(ConsoleUtil.Center("\nPlease enter the name of the title that you want to add \n or press <Enter> to return to the main menu: "));
+                string addTitle = Console.ReadLine();
+                if (addTitle == "")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine(ConsoleUtil.Center("Now enter " + addTitle + " Movie Year."));
+                    string addScore = Console.ReadLine();
+                    addedRecord = addTitle + DataSetting.delineator + addScore;
+                    addingRecord = false;
+                }
+            }
+            string[] addedRecordArray = addedRecord.Split(DataSetting.delineator);
+            Movie newRecord = new Movie() { MovieTitle = addedRecordArray[0], MovieYear = Convert.ToInt32(addedRecordArray[1]) };
+            return newRecord;
         }
         #endregion
 
