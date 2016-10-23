@@ -20,6 +20,7 @@ namespace PersistenceCSV_Briggs50.Controller
         private string dataFile;
         private List<Movie> MovieList = new List<Movie>();
         private List<string> MovieStringListWrite = new List<string>();
+        private string errorMessage;
 
         #endregion
 
@@ -74,11 +75,14 @@ namespace PersistenceCSV_Briggs50.Controller
                     _gameView.DisplayMovies(MovieList);
                     break;
                 case ConsoleView.ViewState.ClearAllRecords:
+                    ClearScores();
+                    _gameView.DisplayClearMessage();
                     break;
                 case ConsoleView.ViewState.AddRecord:
                     AddRecord();
                     break;
                 case ConsoleView.ViewState.DeleteRecord:
+                    DeleteRecord();
                     break;
                 case ConsoleView.ViewState.UpdateRecord:
                     ProcessUpdateRecord();
@@ -145,7 +149,9 @@ namespace PersistenceCSV_Briggs50.Controller
                     MovieList.Add(new Movie() {
                         MovieTitle = properties[0],
                         MovieYear = Convert.ToInt32(properties[1]),
-                        WouldRecommend = Convert.ToBoolean(properties[3]),
+                       // MovieCat = Movie.MovieCategory.TryParse<Movie.MovieCategory>(, out properties[2]),
+                        WouldRecommend = Convert.ToBoolean(properties[3])
+                        
                    //TODO parse or try parse   //  MovieCat = 
                     });             
                 }
@@ -165,20 +171,32 @@ namespace PersistenceCSV_Briggs50.Controller
         /// </summary>
         public void ProcessUpdateRecord()
         {
+
             try
             {
                 ReadMoviesFromTextFile();
 
                 // create score data as an array of list index + updated score info
-                int[] movieData = _gameView.DisplayUpdateRecordScreen(MovieList);
+                int[] scoreData = _gameView.DisplayUpdateRecordScreen(MovieList);
 
                 // if valid score data is returned, update scorelist and write to file using score data array
-                if (movieData[0] != -1)
+                if (scoreData[0] != -1)
                 {
-                    MovieList[movieData[0]].MovieTitle = Convert.ToString(movieData[1]);
+                    MovieList[scoreData[0]].MovieYear = scoreData[1];
                     WriteMoviesToTextFile();
-                    _gameView.DisplayUpdatePrompt(MovieList[movieData[0]]);
+                    _gameView.DisplayUpdatePrompt(MovieList[scoreData[0]]);
                 }
+
+                //// create score data as an array of list index + updated score info
+                //int[] movieData = _gameView.DisplayUpdateRecordScreen(MovieList);
+
+                //// if valid score data is returned, update scorelist and write to file using score data array
+                //if (movieData[0] != -1)
+                //{
+                //    MovieList[movieData[0]].MovieTitle = Convert.ToString(movieData[1]);
+                //    WriteMoviesToTextFile();
+                //    _gameView.DisplayUpdatePrompt(MovieList[movieData[0]]);
+                
             }
             catch (Exception ex)
             {
@@ -207,6 +225,73 @@ namespace PersistenceCSV_Briggs50.Controller
                 throw;
             }
         }
+
+        private void DeleteRecord()
+        {
+            try
+            {
+                string deletedMovieName = _gameView.DiplayDeleteRecordScreen();
+                ReadMoviesFromTextFile();
+                int MovieListIndex = 0;
+                bool MovieFound = false;
+
+                for (int i = 0; i < MovieList.Count; i++)
+                {
+                    if (deletedMovieName == MovieList[i].MovieTitle)
+                    {
+                        MovieListIndex = i;
+                        MovieFound = true;
+                    }
+                }
+
+                if (MovieFound)
+                {
+                    MovieList.Remove(MovieList[MovieListIndex]);
+                    WriteMoviesToTextFile();
+                }
+                else
+                {
+                    _gameView.DisplayNoRecordPrompt();
+                    _gameView.CurrentViewState = ConsoleView.ViewState.MainMenu;
+                }
+            }
+            catch (Exception ex)
+            {
+                _gameView.DisplayErrorPrompt(ex.Message);
+
+                throw;
+            }
+
+        }
+
+        /// <summary>
+        /// clears all high scores from the text file
+        /// </summary>
+        private void ClearScores()
+        {
+            try
+            {
+                string MovieListString;
+
+                foreach (var movie in MovieList)
+                {
+                    MovieListString = movie.MovieTitle + DataSetting.delineator + movie.MovieYear + DataSetting.delineator + movie.MovieCat + DataSetting.delineator + movie.WouldRecommend;
+                    MovieStringListWrite.Add(MovieListString);
+                }
+                File.WriteAllText(DataSetting.textFilePath, string.Empty);
+            }
+
+            catch (Exception)
+            {
+                _gameView.DisplayErrorPrompt(errorMessage);
+                throw;
+            }
+
+
+
+        }
+
+
         #endregion
     }
 }
