@@ -17,7 +17,6 @@ namespace PersistenceCSV_Briggs50.Controller
         // instantiate the gameview
         private static ConsoleView _gameView = new ConsoleView();
         private bool _usingApp;
-        private string dataFile;
         private List<Movie> MovieList = new List<Movie>();
         private List<string> MovieStringListWrite = new List<string>();
         private string errorMessage;
@@ -134,12 +133,12 @@ namespace PersistenceCSV_Briggs50.Controller
                 List<string> MovieStringList = new List<string>();
 
                 MovieList.Clear();
-                Movie.MovieCategory MovieCat;
+                
 
                 MovieStringList = File.ReadAllLines(DataSetting.textFilePath).ToList();
 
                 foreach (string MovieString in MovieStringList)
-                {//TO DO ADD IN THE ENUM
+                {
                     // use the Split method and the delineator on the array to separate each property into an array of properties
                     string[] properties = MovieString.Split(DataSetting.delineator);
                     MovieList.Add(new Movie()
@@ -148,8 +147,6 @@ namespace PersistenceCSV_Briggs50.Controller
                         MovieYear = Convert.ToInt32(properties[1]),
                         MovieCat = (Movie.MovieCategory)Enum.Parse(typeof(Movie.MovieCategory), properties[2]),
                         WouldRecommend = Convert.ToBoolean(properties[3])
-
-                        //TODO parse or try parse   //  MovieCat = 
                     });
                 }
 

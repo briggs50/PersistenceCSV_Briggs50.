@@ -32,10 +32,6 @@ namespace PersistenceCSV_Briggs50.View
         #region FIELDS
 
         private ViewState _currentViewState;
-        private static GameController _gameController;
-        private List<Movie> MovieList;
-        private List<string> MovieStringListWrite;
-        private string value;
 
         #endregion
 
@@ -48,7 +44,6 @@ namespace PersistenceCSV_Briggs50.View
         }
 
         #endregion
-
 
         #region CONSTRUCTORS
 
@@ -115,7 +110,6 @@ namespace PersistenceCSV_Briggs50.View
             Console.WriteLine(ConsoleUtil.Center("5. Clear ALL movie records"));
             Console.WriteLine(ConsoleUtil.Center("6. Quit"));
             Console.WriteLine("\n\n\n");
-
 
             Console.Write(ConsoleUtil.Center("Please enter a menu option between 1 and 6"));
             Console.WriteLine("\n\n\n");
@@ -201,8 +195,8 @@ namespace PersistenceCSV_Briggs50.View
         public void DisplayErrorPrompt(string errorMessage)
         {
             Console.WriteLine(ConsoleUtil.Center("WE'VE ENCOUNTERED AN ERROR"));
-            Console.WriteLine("  " + errorMessage);
-            Console.WriteLine("\n\tPress any key to continue");
+            Console.WriteLine(ConsoleUtil.Center("  " + errorMessage));
+            Console.WriteLine(ConsoleUtil.Center("\n\tPress any key to continue"));
 
             Console.CursorVisible = false;
             Console.ReadKey();
@@ -213,9 +207,7 @@ namespace PersistenceCSV_Briggs50.View
         /// </summary>
         public void DisplayExitScreen()
         {
-            Console.WriteLine("\n\n\n");
             Console.WriteLine(ConsoleUtil.Center("Thank you for playing our program"));
-            Console.WriteLine("\n\n\n");
             Console.WriteLine(ConsoleUtil.Center("Press any key to exit"));
             Console.ReadKey();
 
@@ -262,7 +254,7 @@ namespace PersistenceCSV_Briggs50.View
                 Console.CursorVisible = true;
 
                 Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the name of the movie whos score you wish to update"));
-                Console.Write("\tor press <Enter> to return to the main menu: ");
+                Console.WriteLine(ConsoleUtil.Center("\tor press <Enter> to return to the main menu: "));
                 string userName = Console.ReadLine();
 
                 if (userName == "")
@@ -288,9 +280,9 @@ namespace PersistenceCSV_Briggs50.View
                             int newMovie = -1;
 
                             Console.Clear();
-                            Console.WriteLine("\n\tCurrently " + userName + " has a year of: " + MovieList[i].MovieYear);
-                            Console.WriteLine("\n\tPlease input the updated year for " + userName);
-                            Console.Write("\tor press <enter> to select a diffent movie: ");
+                            Console.WriteLine(ConsoleUtil.Center("\n\tCurrently " + userName + " has a year of: " + MovieList[i].MovieYear));
+                            Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the updated year for " + userName));
+                            Console.WriteLine(ConsoleUtil.Center("\tor press <enter> to select a diffent movie: "));
                             string userYear = Console.ReadLine();
 
                             if (userYear == "") { enteringNewMovie = false; }
@@ -305,8 +297,8 @@ namespace PersistenceCSV_Briggs50.View
                             else
                             {
                                 Console.CursorVisible = false;
-                                Console.WriteLine("\n\tValid scores must be postive integers!");
-                                Console.Write("\tPress any key to continue");
+                                Console.WriteLine(ConsoleUtil.Center("\n\tValid scores must be postive integers!"));
+                                Console.WriteLine(ConsoleUtil.Center("\tPress any key to continue"));
                                 Console.ReadKey();
                                 Console.CursorVisible = true;
                             }
@@ -324,8 +316,8 @@ namespace PersistenceCSV_Briggs50.View
                 Console.CursorVisible = false;
                 if (!movieFound)
                 {
-                    Console.WriteLine("\n\n\tSorry, no movie with that name is on record");
-                    Console.Write("\tPress any key to try another name");
+                    Console.WriteLine(ConsoleUtil.Center("\n\n\tSorry, no movie with that name is on record"));
+                    Console.WriteLine(ConsoleUtil.Center("\tPress any key to try another name"));
                     Console.ReadKey();
                 }
             }
@@ -432,7 +424,7 @@ namespace PersistenceCSV_Briggs50.View
             Console.CursorVisible = false;
             Console.WriteLine(ConsoleUtil.Center("\nMovie Year for " + updatedMovie.MovieTitle + " changed to " + updatedMovie.MovieYear));
            // Console.WriteLine("Recommendation for " + updatedMovie.MovieTitle + "changed to " + updatedMovie.WouldRecommend);
-            Console.Write("\n\tPress any key to return to main menu");
+            Console.WriteLine(ConsoleUtil.Center("\n\tPress any key to return to main menu"));
             Console.ReadKey();
         }
 
@@ -444,19 +436,17 @@ namespace PersistenceCSV_Briggs50.View
             bool addingRecord = true;
             string addedRecord = "";
 
-
             while (addingRecord)
             {
                 Console.Clear();
                 Console.CursorVisible = true;
-
 
                 string addRecommendation;
                 string addCat;
                 string addYear;
 
 
-                Console.WriteLine(ConsoleUtil.Center("\nPlease enter the name of the title that you want to add \n or press <Enter> to return to the main menu: "));
+                Console.WriteLine(ConsoleUtil.Center("\n\t\tPlease enter the name of the title that you want to add \n\t\t or press <Enter> to return to the main menu: "));
                 string addTitle = Console.ReadLine();
                 if (addTitle == "")
                 {
@@ -512,7 +502,7 @@ namespace PersistenceCSV_Briggs50.View
                 Console.CursorVisible = true;
 
                 Console.WriteLine(ConsoleUtil.Center("Please enter the name of the movie that you want to delete."));
-                Console.Write("\tor press <Enter> to return to the main menu: ");
+                Console.WriteLine(ConsoleUtil.Center("or press <Enter> to return to the main menu: "));
                 string deleteMovieName = Console.ReadLine();
 
                 if (deleteMovieName == "")
@@ -543,9 +533,9 @@ namespace PersistenceCSV_Briggs50.View
         /// </summary>
         public void DisplayClearMessage()
         {
-            Console.WriteLine(ConsoleUtil.Center("\n\n\t\t\tAll of your files have been cleared"));
+            Console.WriteLine(ConsoleUtil.Center("\n\n\t\t\tAll files have been cleared"));
 
-            Console.WriteLine("\n\t\t\tPress any key to continue");
+            Console.WriteLine(ConsoleUtil.Center("\n\t\t\tPress any key to continue"));
             Console.ReadKey();
 
             _currentViewState = ViewState.MainMenu;
