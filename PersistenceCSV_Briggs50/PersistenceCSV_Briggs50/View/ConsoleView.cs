@@ -90,7 +90,6 @@ namespace PersistenceCSV_Briggs50.View
         /// </summary>
         public void DisplayWelcomeScreen()
         {
-
             ConsoleUtil.DisplayReset();
             Console.WriteLine("\n\n\n\n\n\n");
             Console.WriteLine(ConsoleUtil.Center("Welcome to my intricate Movie Information Keeper"));
@@ -134,22 +133,22 @@ namespace PersistenceCSV_Briggs50.View
             {
                 case 1:
                     _currentViewState = ViewState.DisplayAllRecords;
-                    // display all score records selected
+                    // display all movie records selected
                     break;
                 case 2:
-                    // add score record selected
+                    // add movie record selected
                     _currentViewState = ViewState.AddRecord;
                     break;
                 case 3:
-                    // update score record selected
+                    // update movie record selected
                     _currentViewState = ViewState.UpdateRecord;
                     break;
                 case 4:
-                    // delete score record selected
+                    // delete movie record selected
                     _currentViewState = ViewState.DeleteRecord;
                     break;
                 case 5:
-                    // delete ALL score records selected
+                    // delete ALL movie records selected
                     _currentViewState = ViewState.ClearAllRecords;
                     break;
                 case 6:
@@ -174,7 +173,6 @@ namespace PersistenceCSV_Briggs50.View
 
             while (choosing & numberOfAttempts != maxAttempts)
             {
-
                 // checks that the integer is in range and that it is a key
                 if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out menuChoice) && menuChoice > 0 && menuChoice <= 6)
                 {
@@ -184,9 +182,7 @@ namespace PersistenceCSV_Briggs50.View
                 {
                     Console.WriteLine(ConsoleUtil.Center("ERROR: Valid menu choices are numbers 1-6"));
                     numberOfAttempts++;
-
                 }
-
             }
 
             if (numberOfAttempts == maxAttempts)
@@ -194,6 +190,7 @@ namespace PersistenceCSV_Briggs50.View
                 Console.Clear();
                 DisplayExitScreen();
             }
+
             return menuChoice;
         }
 
@@ -203,7 +200,6 @@ namespace PersistenceCSV_Briggs50.View
         /// <param name="errorMessage"></param>
         public void DisplayErrorPrompt(string errorMessage)
         {
-
             Console.WriteLine(ConsoleUtil.Center("WE'VE ENCOUNTERED AN ERROR"));
             Console.WriteLine("  " + errorMessage);
             Console.WriteLine("\n\tPress any key to continue");
@@ -255,56 +251,55 @@ namespace PersistenceCSV_Briggs50.View
         /// <param name="MovieList"></param>
         public int[] DisplayUpdateRecordScreen(List<Movie> MovieList)
         {
+            int[] updatedMovieData = { -1, -1 };
 
-            int[] updatedScoreData = { -1, -1 };
+            bool selectingMovie = true;
 
-            bool selectingPlayer = true;
-
-            // find a valid player from saves
-            while (selectingPlayer)
+            // find a valid movie from saved movies
+            while (selectingMovie)
             {
                 Console.Clear();
                 Console.CursorVisible = true;
 
-                Console.WriteLine("\n\tPlease input the name of the player whos score you wish to update");
+                Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the name of the movie whos score you wish to update"));
                 Console.Write("\tor press <Enter> to return to the main menu: ");
                 string userName = Console.ReadLine();
 
                 if (userName == "")
                 {
-                    selectingPlayer = false;
+                    selectingMovie = false;
                     break;
                 }
 
-                // check through all player scores, replace player score if the name entered matches
-                bool playerFound = false;
+                // checks if movie is in the text file, and if it is it gets updated
+                bool movieFound = false;
 
                 for (int i = 0; i < MovieList.Count; i++)
                 {
                     if (MovieList[i].MovieTitle == userName)
                     {
-                        playerFound = true;
+                        movieFound = true;
 
-                        bool enteringNewScore = true;
+                        bool enteringNewMovie = true;
 
-                        // enter new player score
-                        while (enteringNewScore)
+                        // enter new movie year
+                        while (enteringNewMovie)
                         {
-                            int newScore = -1;
+                            int newMovie = -1;
 
                             Console.Clear();
                             Console.WriteLine("\n\tCurrently " + userName + " has a year of: " + MovieList[i].MovieYear);
                             Console.WriteLine("\n\tPlease input the updated year for " + userName);
                             Console.Write("\tor press <enter> to select a diffent movie: ");
-                            string userScore = Console.ReadLine();
+                            string userYear = Console.ReadLine();
 
-                            if (userScore == "") { enteringNewScore = false; }
-                            else if (int.TryParse(userScore, out newScore) && newScore >= 0)
+                            if (userYear == "") { enteringNewMovie = false; }
+                            else if (int.TryParse(userYear, out newMovie) && newMovie >= 0)
                             {
-                                selectingPlayer = false;
-                                enteringNewScore = false;
-                                updatedScoreData[0] = i;
-                                updatedScoreData[1] = newScore;
+                                selectingMovie = false;
+                                enteringNewMovie = false;
+                                updatedMovieData[0] = i;
+                                updatedMovieData[1] = newMovie;
                             }
 
                             else
@@ -315,6 +310,11 @@ namespace PersistenceCSV_Briggs50.View
                                 Console.ReadKey();
                                 Console.CursorVisible = true;
                             }
+
+                            //Console.WriteLine("\n\tCurrently " + userName + " has a year of: " + MovieList[i].WouldRecommend);
+                            //Console.WriteLine("\n\tPlease input the updated year for " + userName);
+                            //Console.Write("\tor press <enter> to select a diffent movie: ");
+                            //string userRecommendation = Console.ReadLine();
                         }
 
                         i = MovieList.Count;
@@ -322,88 +322,106 @@ namespace PersistenceCSV_Briggs50.View
                 }
 
                 Console.CursorVisible = false;
-                if (!playerFound)
+                if (!movieFound)
                 {
-                    Console.WriteLine("\n\n\tSorry, no player with that name is on record");
+                    Console.WriteLine("\n\n\tSorry, no movie with that name is on record");
                     Console.Write("\tPress any key to try another name");
                     Console.ReadKey();
                 }
             }
 
-            return updatedScoreData;
-            //    int[] updatedMovieData = { -1, -1};
-
-            //    bool selectingMovie = true;
-
-            //    // find a valid movie from saves
-            //    while (selectingMovie)
-            //    {
-
-            //        Console.Clear();
-            //        Console.CursorVisible = true;
-
-            //        Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the name of the movie you wish to update"));
-            //        Console.Write("\tor press <Enter> to return to the main menu: ");
-            //        string userTitle = Console.ReadLine();
-
-            //        if (userTitle == "")
-            //        {
-            //            selectingMovie = false;
-            //            break;
-            //        }
-
-            //        // check through all player scores, replace player score if the name entered matches
-            //        bool movieFound = false;
-
-            //        for (int i = 0; i < MovieList.Count; i++)
-            //        {
-            //            if (MovieList[i].MovieTitle == userTitle)
-            //            {
-            //                movieFound = true;
-
-            //                bool enteringNewMovie = true;
-
-            //                // enter new player score
-            //                while (enteringNewMovie)
-            //                {
-
-
-            //                    Console.Clear();
-            //                    Console.WriteLine(ConsoleUtil.Center("\n\tCurrently " + userTitle + " has a title of: " + this.MovieList[i].MovieTitle));
-            //                    Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the updated title for " + userTitle + "or press <enter> to select a diffent movie: "));
-            //                    userTitle = Console.ReadLine();
-
-            //                    //if (userTitle == "") { enteringNewMovie = false; }
-            //                    //else
-            //                    //{
-            //                    //    selectingMovie = false;
-            //                    //    enteringNewMovie = false
-            //                    //}
-            //                    Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the updated year for " + userTitle));
-            //                    string userYear = Console.ReadLine();
-            //                    Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the updated category for " + userTitle));
-            //                    string userCat = Console.ReadLine();
-            //                    Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the updated recomendation (true/false) for " + userTitle));
-            //                    string userRecommendation = Console.ReadLine();
-            //                }
-
-            //                i = MovieList.Count;
-            //            }
-            //        }
-
-            //        Console.CursorVisible = false;
-            //        if (!movieFound)
-            //        {
-            //            Console.WriteLine("\n\n\tSorry, title with that name is on record");
-            //            Console.Write("\tPress any key to try another title");
-            //            Console.ReadKey();
-            //        }
-            //    }
-
-            //    return updatedMovieData;
-            //}
+            return updatedMovieData;
 
         }
+
+        /// <summary>
+        /// displays the updated records to the screen
+        /// </summary>
+        /// <param name="MovieList"></param>
+        //public bool[] DisplayUpdateBoolRecordScreen(List<Movie> MovieList)
+        //{
+
+    //    int[] updatedMovieData = { -1, -1 };
+
+    //    bool selectingMovie = true;
+
+    //        // find a valid movie from saves
+    //        while (selectingMovie)
+    //        {
+    //            Console.Clear();
+    //            Console.CursorVisible = true;
+
+    //            Console.WriteLine(ConsoleUtil.Center("\n\tPlease input the name of the movie whos score you wish to update"));
+    //            Console.Write("\tor press <Enter> to return to the main menu: ");
+    //            string userName = Console.ReadLine();
+
+    //            if (userName == "")
+    //            {
+    //                selectingMovie = false;
+    //                break;
+    //            }
+
+    //// checks if movie is in the text file, and if it is it gets updated
+    //bool movieFound = false;
+
+    //            for (int i = 0; i<MovieList.Count; i++)
+    //            {
+    //                if (MovieList[i].MovieTitle == userName)
+    //                {
+    //                    movieFound = true;
+
+    //                    bool enteringNewMovie = true;
+
+    //                    // enter new movie year
+    //                    while (enteringNewMovie)
+    //                    {
+    //                        int newMovie = -1;
+
+    //Console.Clear();
+    //                        Console.WriteLine("\n\tCurrently " + userName + " has a year of: " + MovieList[i].MovieYear);
+    //                        Console.WriteLine("\n\tPlease input the updated year for " + userName);
+    //                        Console.Write("\tor press <enter> to select a diffent movie: ");
+    //                        string userYear = Console.ReadLine();
+
+    //                        if (userYear == "") { enteringNewMovie = false; }
+    //                        else if (int.TryParse(userYear, out newMovie) && newMovie >= 0)
+    //                        {
+    //                            selectingMovie = false;
+    //                            enteringNewMovie = false;
+    //                            updatedMovieData[0] = i;
+    //                            updatedMovieData[1] = newMovie;
+    //                        }
+
+    //                        else
+    //                        {
+    //                            Console.CursorVisible = false;
+    //                            Console.WriteLine("\n\tValid scores must be postive integers!");
+    //                            Console.Write("\tPress any key to continue");
+    //                            Console.ReadKey();
+    //                            Console.CursorVisible = true;
+    //                        }
+
+    //                        //Console.WriteLine("\n\tCurrently " + userName + " has a year of: " + MovieList[i].WouldRecommend);
+    //                        //Console.WriteLine("\n\tPlease input the updated year for " + userName);
+    //                        //Console.Write("\tor press <enter> to select a diffent movie: ");
+    //                        //string userRecommendation = Console.ReadLine();
+    //                    }
+
+    //                    i = MovieList.Count;
+    //                }
+    //            }
+
+    //            Console.CursorVisible = false;
+    //            if (!movieFound)
+    //            {
+    //                Console.WriteLine("\n\n\tSorry, no movie with that name is on record");
+    //                Console.Write("\tPress any key to try another name");
+    //                Console.ReadKey();
+    //            }
+    //        }
+
+    //        return updatedMovieData;
+        //}
 
         /// <summary>
         /// displays the updated movies
@@ -412,16 +430,10 @@ namespace PersistenceCSV_Briggs50.View
         public void DisplayUpdatePrompt(Movie updatedMovie)
         {
             Console.CursorVisible = false;
-            Console.WriteLine("\tScore for " + updatedMovie.MovieTitle + " changed to " + updatedMovie.MovieYear);
+            Console.WriteLine(ConsoleUtil.Center("\nMovie Year for " + updatedMovie.MovieTitle + " changed to " + updatedMovie.MovieYear));
+           // Console.WriteLine("Recommendation for " + updatedMovie.MovieTitle + "changed to " + updatedMovie.WouldRecommend);
             Console.Write("\n\tPress any key to return to main menu");
             Console.ReadKey();
-            //Console.CursorVisible = false;
-            //Console.WriteLine("\tMovie Title: " + updatedMovie.MovieTitle + " changed to " + updatedMovie.MovieTitle);
-            //Console.WriteLine("\tMovie Category: " + updatedMovie.MovieCat + " changed to " + updatedMovie.MovieCat);
-            //Console.WriteLine("\tMovie Year: " + updatedMovie.MovieYear + " changed to " + updatedMovie.MovieYear);
-            //Console.WriteLine("\tMovie Recommendation: " + updatedMovie.WouldRecommend + " changed to " + updatedMovie.WouldRecommend);
-            //Console.Write("\n\tPress any key to return to main menu");
-            //Console.ReadKey();
         }
 
         /// <summary>
@@ -432,14 +444,17 @@ namespace PersistenceCSV_Briggs50.View
             bool addingRecord = true;
             string addedRecord = "";
 
+
             while (addingRecord)
             {
                 Console.Clear();
                 Console.CursorVisible = true;
-                string addYear;
-              
+
+
                 string addRecommendation;
                 string addCat;
+                string addYear;
+
 
                 Console.WriteLine(ConsoleUtil.Center("\nPlease enter the name of the title that you want to add \n or press <Enter> to return to the main menu: "));
                 string addTitle = Console.ReadLine();
@@ -450,10 +465,9 @@ namespace PersistenceCSV_Briggs50.View
                 else
                 {
                     Console.WriteLine(ConsoleUtil.Center("Now enter " + addTitle + " Movie Year."));
-                    addYear = Console.ReadLine();
-                    addedRecord = addTitle + DataSetting.delineator + addYear;
-                    
+                    addYear = Console.ReadLine();                                      
                 }
+
 
                 if (addYear == "")
                 {
@@ -467,7 +481,7 @@ namespace PersistenceCSV_Briggs50.View
                 }
                 if (addCat == "")
                 {
-
+                    break;
                 }
                 else
                 {
@@ -475,11 +489,14 @@ namespace PersistenceCSV_Briggs50.View
                     addRecommendation = Console.ReadLine();
                     addedRecord = addTitle + DataSetting.delineator + addYear + DataSetting.delineator + addCat + DataSetting.delineator + addRecommendation;
                     addingRecord = false;
+
                 }
             }
+
             string[] addedRecordArray = addedRecord.Split(DataSetting.delineator);
-            Movie newRecord = new Movie() { MovieTitle = addedRecordArray[0], MovieYear = Convert.ToInt32(addedRecordArray[1]), WouldRecommend = Convert.ToBoolean(addedRecordArray[2]) }; //MovieCat = addedRecordArray[2] };
-            return newRecord;//MovieCat = Movie.MovieCategory.TryParse<Movie.MovieCategory>(value, out addedRecordArray[2]),
+            Movie newRecord = new Movie() { MovieTitle = addedRecordArray[0], MovieYear = Convert.ToInt32(addedRecordArray[1]), MovieCat = (Movie.MovieCategory)Enum.Parse(typeof(Movie.MovieCategory), addedRecordArray[2]), WouldRecommend = Convert.ToBoolean(addedRecordArray[3]) }; //MovieCat = addedRecordArray[2] };
+            Array.Sort(addedRecordArray);
+            return newRecord;
         }
 
         /// <summary>
@@ -494,7 +511,7 @@ namespace PersistenceCSV_Briggs50.View
                 Console.Clear();
                 Console.CursorVisible = true;
 
-                Console.WriteLine("Please enter the name of the movie that you want to delete.");
+                Console.WriteLine(ConsoleUtil.Center("Please enter the name of the movie that you want to delete."));
                 Console.Write("\tor press <Enter> to return to the main menu: ");
                 string deleteMovieName = Console.ReadLine();
 
@@ -517,7 +534,7 @@ namespace PersistenceCSV_Briggs50.View
         /// </summary>
         public void DisplayNoRecordPrompt()
         {
-            Console.WriteLine("No player record found!");
+            Console.WriteLine(ConsoleUtil.Center("No movie record found!"));
             Console.ReadKey();
         }
 
@@ -526,7 +543,7 @@ namespace PersistenceCSV_Briggs50.View
         /// </summary>
         public void DisplayClearMessage()
         {
-            Console.WriteLine("\n\n\t\t\tAll of your files have been cleared");
+            Console.WriteLine(ConsoleUtil.Center("\n\n\t\t\tAll of your files have been cleared"));
 
             Console.WriteLine("\n\t\t\tPress any key to continue");
             Console.ReadKey();

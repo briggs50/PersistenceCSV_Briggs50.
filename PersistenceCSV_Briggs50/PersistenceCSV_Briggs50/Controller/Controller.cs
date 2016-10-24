@@ -96,16 +96,13 @@ namespace PersistenceCSV_Briggs50.Controller
             }
         }
 
-
         /// <summary>
         /// writes to the text file
         /// </summary>
         public void WriteMoviesToTextFile()
-        {           
-
+        {
             try
             {
-
                 string MovieListString;
 
                 // build the list to write to the text file line by line
@@ -115,7 +112,7 @@ namespace PersistenceCSV_Briggs50.Controller
                     MovieStringListWrite.Add(MovieListString);
                 }
 
-                File.WriteAllLines(DataSetting.textFilePath, MovieStringListWrite);         
+                File.WriteAllLines(DataSetting.textFilePath, MovieStringListWrite);
 
                 _gameView.CurrentViewState = ConsoleView.ViewState.MainMenu;
             }
@@ -125,7 +122,6 @@ namespace PersistenceCSV_Briggs50.Controller
                 _gameView.DisplayErrorPrompt(ex.Message);
                 throw;
             }
-
         }
 
         /// <summary>
@@ -138,7 +134,7 @@ namespace PersistenceCSV_Briggs50.Controller
                 List<string> MovieStringList = new List<string>();
 
                 MovieList.Clear();
-
+                Movie.MovieCategory MovieCat;
 
                 MovieStringList = File.ReadAllLines(DataSetting.textFilePath).ToList();
 
@@ -146,14 +142,15 @@ namespace PersistenceCSV_Briggs50.Controller
                 {//TO DO ADD IN THE ENUM
                     // use the Split method and the delineator on the array to separate each property into an array of properties
                     string[] properties = MovieString.Split(DataSetting.delineator);
-                    MovieList.Add(new Movie() {
+                    MovieList.Add(new Movie()
+                    {
                         MovieTitle = properties[0],
                         MovieYear = Convert.ToInt32(properties[1]),
-                       // MovieCat = Movie.MovieCategory.TryParse<Movie.MovieCategory>(, out properties[2]),
+                        MovieCat = (Movie.MovieCategory)Enum.Parse(typeof(Movie.MovieCategory), properties[2]),
                         WouldRecommend = Convert.ToBoolean(properties[3])
-                        
-                   //TODO parse or try parse   //  MovieCat = 
-                    });             
+
+                        //TODO parse or try parse   //  MovieCat = 
+                    });
                 }
 
                 return MovieList;
@@ -171,32 +168,27 @@ namespace PersistenceCSV_Briggs50.Controller
         /// </summary>
         public void ProcessUpdateRecord()
         {
-
             try
             {
                 ReadMoviesFromTextFile();
 
-                // create score data as an array of list index + updated score info
-                int[] scoreData = _gameView.DisplayUpdateRecordScreen(MovieList);
+                // creates a movie data as an array of list index. Updates the movie information we entered
+                int[] movieData = _gameView.DisplayUpdateRecordScreen(MovieList);
 
-                // if valid score data is returned, update scorelist and write to file using score data array
-                if (scoreData[0] != -1)
+                // the movie data is returned and the updata information is written to the file
+                if (movieData[0] != -1)
                 {
-                    MovieList[scoreData[0]].MovieYear = scoreData[1];
+                    MovieList[movieData[0]].MovieYear = movieData[1];
                     WriteMoviesToTextFile();
-                    _gameView.DisplayUpdatePrompt(MovieList[scoreData[0]]);
+                    _gameView.DisplayUpdatePrompt(MovieList[movieData[0]]);
                 }
 
-                //// create score data as an array of list index + updated score info
-                //int[] movieData = _gameView.DisplayUpdateRecordScreen(MovieList);
+              //  bool[] movieRecommend = _gameView.DisplayUpdateBoolRecordScreen(MovieList);
 
-                //// if valid score data is returned, update scorelist and write to file using score data array
-                //if (movieData[0] != -1)
-                //{
-                //    MovieList[movieData[0]].MovieTitle = Convert.ToString(movieData[1]);
+                //   MovieList[movieRecommend].WouldRecommend = movieRecommend[1];
                 //    WriteMoviesToTextFile();
-                //    _gameView.DisplayUpdatePrompt(MovieList[movieData[0]]);
-                
+                // _gameView.DisplayUpdatePrompt(MovieList[movieRecommend[0]]);
+
             }
             catch (Exception ex)
             {
@@ -222,10 +214,14 @@ namespace PersistenceCSV_Briggs50.Controller
             catch (Exception ex)
             {
                 _gameView.DisplayErrorPrompt(ex.Message);
-                throw;
+                
             }
+            _gameView.CurrentViewState = ConsoleView.ViewState.MainMenu;
         }
 
+        /// <summary>
+        /// method to delete scores
+        /// </summary>
         private void DeleteRecord()
         {
             try
@@ -258,10 +254,8 @@ namespace PersistenceCSV_Briggs50.Controller
             catch (Exception ex)
             {
                 _gameView.DisplayErrorPrompt(ex.Message);
-
-                throw;
             }
-
+            _gameView.CurrentViewState = ConsoleView.ViewState.MainMenu;
         }
 
         /// <summary>
@@ -286,8 +280,6 @@ namespace PersistenceCSV_Briggs50.Controller
                 _gameView.DisplayErrorPrompt(errorMessage);
                 throw;
             }
-
-
 
         }
 

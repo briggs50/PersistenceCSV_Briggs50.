@@ -12,6 +12,7 @@ namespace PersistenceCSV_Briggs50.Model
 
         public enum MovieCategory
         {
+            None,
             Drama,
             Musical,
             Action,
@@ -63,6 +64,9 @@ namespace PersistenceCSV_Briggs50.Model
 
         #endregion
 
+
+        #region CONSTRUCTORS
+
         public Movie()
         {
 
@@ -76,5 +80,7 @@ namespace PersistenceCSV_Briggs50.Model
             this.MovieCat = moviecategory;
            
         }
+
+        #endregion
     }
 }
